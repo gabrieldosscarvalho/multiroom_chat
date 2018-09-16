@@ -1,5 +1,5 @@
 module.exports	= (application) => {
 	application.get('/', (request, response) => {
-		response.send('Teste');
+		response.render('index');
 	});
 };
