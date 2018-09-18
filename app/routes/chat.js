@@ -1,9 +1,9 @@
 module.exports	= (application) => {
 	application.get('/chat', (request, response) => {
-		response.render('chat');
+		application.app.controllers.chat.iniciaChat( application, request, response );
 	});
 
 	application.post('/chat', (request, response) => {
-		response.render('chat');
+		application.app.controllers.chat.iniciaChat( application, request, response );
 	});
 };

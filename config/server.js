@@ -11,7 +11,7 @@ var bodyParser			= require('body-parser');
 var expressValidator	= require('express-validator');
 
 
-/* iniciar o objeto do express */
+/** @param Application iniciar o objeto do express */
 var app					= express();
 
 // ----------------
