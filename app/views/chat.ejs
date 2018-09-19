@@ -71,32 +71,9 @@
 		<div class="container">
 			<div class="row conversa" id="conversa">
 				<div class="col-md-1"></div>
-				<div class="col-md-10">
-					<div class="dialogo">
-						<h4>Jorge</h4>
-						<p>Fala José, blz cara?</p>
-					</div>
-					
-					<div class="dialogo">
-						<h4>José</h4>
-						<p>Opa, tudo certo!</p>
-					</div>
-					
-					<div class="dialogo">
-						<h4>Jorge</h4>
-						<p>Vai estudar mais sobre NodeJS hoje?</p>
-					</div>
-					
-					<div class="dialogo">
-						<h4>José</h4>
-						<p>Sim, com certeza. Vamos trabalhar com Websockets hoje, o assunto é bem interessante</p>
-					</div>
-					
-					<div class="dialogo">
-						<h4>Jorge</h4>
-						<p>Show de bola, comunicação bi-direcional em páginas ou sistemas web é muito bacana mesmo</p>
-					</div>
-				</div>
+
+				<div class="col-md-10" id="dialogos"></div>
+
 				<div class="col-md-1"></div>
 				
 			</div>
@@ -142,6 +119,23 @@
 		</nav>		
 		
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+		<script src="/socket.io/socket.io.js"></script>
+
+		<script>
+			var domDialogos	= document.getElementById('dialogos');
+
+			var socket = io('http://localhost');
+
+			// Ouvir o que o socket manda
+			socket.on('msgParaCliente', function(data){
+				// Adicionar o dialogo para o html
+				domDialogos.innerHTML	+= '<div class="dialogo">' +
+												'<h4>' + data.apelido + '</h4>' +
+												'<p>' + data.mensagem + '</p>' +
+											'</div>';
+			});
+		</script>
 		
 	</body>
 </html>

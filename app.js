@@ -7,4 +7,16 @@ var server	= app.listen(80, () => {
 });
 
 // Socket
-require('socket.io').listen(server);
+var io		= require('socket.io').listen(server);
+
+app.set('io', io);
+
+/* criar a conexao WebSocket */
+io.on('connection', function( socket ){
+	console.log('Usuário conectou no SOCKET');
+
+	// Disparado quando um cliente sai da conexao WebSocket
+	socket.on('disconnect', function(){
+		console.log('Usuário DESconectou no SOCKET');
+	});
+});
