@@ -19,4 +19,10 @@ io.on('connection', function( socket ){
 	socket.on('disconnect', function(){
 		console.log('Usuário DESconectou no SOCKET');
 	});
+
+	// Ouvir mensagem enviada para o servidor
+	socket.on('msgParaServidor', function(data){
+		socket.emit('msgParaCliente', data); // Para o usuario emissor
+		socket.broadcast.emit('msgParaCliente', data); // Para os outros usuários
+	});
 });

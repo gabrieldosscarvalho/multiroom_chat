@@ -104,16 +104,15 @@
 		<nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
 			<div class="container">
 				<div class="panel-body campo-mensagem">
-					<form>
-						<div class="col-md-12">
-							<div class="input-group">
-								<input type="text" class="form-control" placeholder="Mensagem">
-								<span class="input-group-btn">
-									<button class="btn btn-default" type="button">></button>
-								</span>
-							</div>
+					<div class="col-md-12">
+						<div class="input-group">
+							<input type="text" class="form-control" placeholder="Mensagem" id="mensagem" name="mensagem">
+							<input type="hidden" name="apelido" value="<%=dadosForm.apelido%>" id="apelido">
+							<span class="input-group-btn">
+								<button class="btn btn-default" type="button" id="enviar_mensagem" name="enviar_mensagem">></button>
+							</span>
 						</div>
-					</form>
+					</div>
 				</div>
 			</div>
 		</nav>		
@@ -129,11 +128,40 @@
 
 			// Ouvir o que o socket manda
 			socket.on('msgParaCliente', function(data){
+				console.log(data);
 				// Adicionar o dialogo para o html
 				domDialogos.innerHTML	+= '<div class="dialogo">' +
 												'<h4>' + data.apelido + '</h4>' +
 												'<p>' + data.mensagem + '</p>' +
 											'</div>';
+			});
+
+			// Enviar mensagem
+			var domMensagem		= document.getElementById('mensagem');
+			var domApelido		= document.getElementById('apelido');
+
+			var functionEnviarMensagem	= function(event){
+				event.preventDefault();
+
+				var emitiu = socket.emit(
+					'msgParaServidor',
+					{
+						apelido: domApelido.value,
+						mensagem: domMensagem.value
+					}
+				);
+
+				if( emitiu ) {
+					domMensagem.value	= '';
+				}
+			};
+
+			document.getElementById('enviar_mensagem').addEventListener('click', functionEnviarMensagem); // Click
+
+			domMensagem.addEventListener('keyup', function(event){ // Enter
+				if( event.keyCode === 13 ){
+					functionEnviarMensagem(event);
+				}
 			});
 		</script>
 		
