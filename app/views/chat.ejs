@@ -80,22 +80,7 @@
 			
 			<div class="row participantes" id="participantes" style="display:none">
 				<div class="col-md-1"></div>
-				<div class="col-md-10">
-					<span class="participante">
-						<img src="images/ico_usuario.png" />
-						Jorge
-					</span>
-					
-					<span class="participante">
-						<img src="images/ico_usuario.png" />
-						José
-					</span>
-					
-					<span class="participante">
-						<img src="images/ico_usuario.png" />
-						Fernando
-					</span>
-				</div>
+				<div class="col-md-10" id="participante_lista"></div>
 				<div class="col-md-1"></div>
 				
 			</div>
@@ -108,6 +93,7 @@
 						<div class="input-group">
 							<input type="text" class="form-control" placeholder="Mensagem" id="mensagem" name="mensagem">
 							<input type="hidden" name="apelido" value="<%=dadosForm.apelido%>" id="apelido">
+							<input type="hidden" name="apelido_atualizado_nos_clientes" value="0" id="apelido_atualizado_nos_clientes">
 							<span class="input-group-btn">
 								<button class="btn btn-default" type="button" id="enviar_mensagem" name="enviar_mensagem">></button>
 							</span>
@@ -122,18 +108,30 @@
 		<script src="/socket.io/socket.io.js"></script>
 
 		<script>
-			var domDialogos	= document.getElementById('dialogos');
+			var domDialogos						= document.getElementById('dialogos');
+			var domParticipantesLista			= document.getElementById('participante_lista');
+			var domApelidoAtualizadoNosClientes	= document.getElementById('apelido_atualizado_nos_clientes');
 
 			var socket = io('http://localhost');
 
 			// Ouvir o que o socket manda
 			socket.on('msgParaCliente', function(data){
-				console.log(data);
 				// Adicionar o dialogo para o html
 				domDialogos.innerHTML	+= '<div class="dialogo">' +
 												'<h4>' + data.apelido + '</h4>' +
 												'<p>' + data.mensagem + '</p>' +
 											'</div>';
+
+				window.scrollBy(0, window.innerHeight);
+			});
+
+			// Lista de Participantes
+			socket.on('participantesParaCliente', function(data){
+				console.log(data);
+				domParticipantesLista.innerHTML	+= '<span class="participante">' +
+													'<img src="images/ico_usuario.png" />' +
+													data.apelido +
+												'</span>';
 			});
 
 			// Enviar mensagem
@@ -147,12 +145,14 @@
 					'msgParaServidor',
 					{
 						apelido: domApelido.value,
-						mensagem: domMensagem.value
+						mensagem: domMensagem.value,
+						apelido_atualizado_nos_clientes: domApelidoAtualizadoNosClientes.value
 					}
 				);
 
 				if( emitiu ) {
-					domMensagem.value	= '';
+					domMensagem.value						= '';
+					domApelidoAtualizadoNosClientes.value	= 1;
 				}
 			};
 

@@ -22,7 +22,14 @@ io.on('connection', function( socket ){
 
 	// Ouvir mensagem enviada para o servidor
 	socket.on('msgParaServidor', function(data){
+		/* Dialogos */
 		socket.emit('msgParaCliente', data); // Para o usuario emissor
 		socket.broadcast.emit('msgParaCliente', data); // Para os outros usuários
+
+		/* Participantes */
+		if( parseInt(data.apelido_atualizado_nos_clientes) == 0 ) {
+			socket.emit('participantesParaCliente', {apelido: data.apelido}); // Para o usuario emissor
+			socket.broadcast.emit('participantesParaCliente', {apelido: data.apelido}); // Para os outros usuários
+		}
 	});
 });
